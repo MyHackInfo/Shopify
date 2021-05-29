@@ -1,0 +1,29 @@
+{% paginate collections["all-products"].products by 600 %}
+	
+	<script>
+      var all_Products = {}
+      {% for product in collections["all-products"].products %}
+        all_Products['{{ product.handle }}'] = 
+                 {
+                    "productName": "{{product.title}}",
+                    {% assign featured_image = product.images[0] | img_url: '540x' %} 
+                    "productPhoto": "{{featured_image}}",
+                    {% assign image = product.images[1] | img_url: '720x' %}	
+                    "otherPhoto": "{{image}}",
+                    "productUrl": "products/{{product.handle}}",
+                    "variantId": "{{ product.variants[0].id }}",
+                    "productSlug": "{{product.handle}}",
+                    "btn":  {% if product.variants[0].available %}"ADD TO CART" {%else%} "SOLD OUT" {%endif %},
+                    "disabled": "{% if product.variants[0].available %} disabled {%endif %}",
+                    "priceOne": "{{product.variants[0].price | money}}"
+         	 	}
+      {% endfor %}
+      
+     </script>
+
+{% endpaginate %}
+		
+{% comment %} 
+	here is the exampale of more then 20 products 
+  all_Products['product-handle'].btn 
+{% endcomment %}
